@@ -8,7 +8,7 @@ import {
   TolovResponse,
 } from '../types';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://minimarket-backend-3t1d.onrender.com/api';
 
 async function fetcher<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${url}`, {
