@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQarzdorlar, useQarzdorActions, useSearch } from '@/features/qarzdor/hooks/useQarzdorlar';
 import { formatSum, formatDate, progressPercent } from '@/features/qarzdor/utils/format';
 import { Qarzdor } from '@/features/qarzdor/types';
+import { useRouter } from 'next/router';
 
 
 
@@ -157,11 +158,18 @@ export default function HomePage() {
   const [showAdd, setShowAdd] = useState(false);
   const [tolovTarget, setTolovTarget] = useState<Qarzdor | null>(null);
   const [qarzTarget, setQarzTarget] = useState<Qarzdor | null>(null);
+  const router = useRouter();
 
   // Forms
   const [addForm, setAddForm] = useState({ kim: '', umumiyQarz: '', izoh: '' });
   const [tolovForm, setTolovForm] = useState({ miqdor: '', izoh: '' });
   const [qarzForm, setQarzForm] = useState({ miqdor: '' });
+  
+  useEffect(() => {
+    if (localStorage.getItem('isAuth') !== 'true') {
+      router.push('/login');
+    }
+  }, []);
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
