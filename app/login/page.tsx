@@ -53,7 +53,7 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('https://minimarket-backend-3t1d.onrender.com/api/auth/verify', {
+      const res = await fetch('https://minimarket-backend-3t1d.onrender.com/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: getCode() }),
