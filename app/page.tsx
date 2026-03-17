@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useQarzdorlar, useQarzdorActions, useSearch } from '@/features/qarzdor/hooks/useQarzdorlar';
 import { formatSum, formatDate, progressPercent } from '@/features/qarzdor/utils/format';
 import { Qarzdor } from '@/features/qarzdor/types';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 
 
