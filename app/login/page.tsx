@@ -76,74 +76,156 @@ export default function LoginPage() {
   return (
     <>
       <style>{`
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(24px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
         .login-page {
           min-height: 100vh;
+          min-height: 100dvh;
           display: flex;
           align-items: center;
           justify-content: center;
           background: #0f172a;
           font-family: 'Segoe UI', system-ui, sans-serif;
-          padding: 20px;
+          padding: 16px;
         }
+
         .login-card {
           background: #1e293b;
           border: 1px solid #334155;
           border-radius: 24px;
-          padding: 48px 40px;
+          padding: 40px 32px 48px;
           width: 100%;
           max-width: 420px;
           text-align: center;
           box-shadow: 0 25px 60px rgba(0,0,0,0.5);
           animation: fadeIn 0.4s ease;
         }
-        .login-icon { font-size: 52px; margin-bottom: 16px; }
-        .login-title { color: #f1f5f9; font-size: 26px; font-weight: 700; margin-bottom: 8px; }
-        .login-sub { color: #94a3b8; font-size: 14px; margin-bottom: 36px; }
-        .code-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
+
+        .login-icon { font-size: 48px; margin-bottom: 14px; }
+        .login-title {
+          color: #f1f5f9;
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 8px;
+        }
+        .login-sub {
+          color: #94a3b8;
+          font-size: 14px;
+          margin-bottom: 32px;
+          line-height: 1.5;
+        }
+
+        /* Kod inputlari */
+        .code-row {
+          display: flex;
+          gap: 8px;
+          justify-content: center;
+          margin-bottom: 24px;
+        }
+
         .code-box {
-          width: 52px; height: 60px;
+          width: 44px;
+          height: 54px;
           text-align: center;
-          font-size: 26px;
+          font-size: 24px;
           font-weight: 700;
           border: 2px solid #334155;
-          border-radius: 14px;
+          border-radius: 12px;
           background: #0f172a;
           color: #f1f5f9;
           outline: none;
-          transition: border-color 0.2s, background 0.2s;
+          transition: border-color 0.2s, background 0.2s, transform 0.1s;
           font-family: inherit;
+          -webkit-appearance: none;
+          appearance: none;
+          caret-color: #6366f1;
         }
-        .code-box:focus { border-color: #6366f1; }
-        .code-box.filled { border-color: #6366f1; background: #1e1b4b; }
-        .error-msg { color: #f87171; font-size: 14px; margin-bottom: 16px; min-height: 20px; }
+        .code-box:focus {
+          border-color: #6366f1;
+          transform: scale(1.05);
+        }
+        .code-box.filled {
+          border-color: #6366f1;
+          background: #1e1b4b;
+        }
+
+        /* Xato */
+        .error-msg {
+          color: #f87171;
+          font-size: 13px;
+          margin-bottom: 14px;
+          min-height: 18px;
+          line-height: 1.4;
+        }
+
+        /* Tugma */
         .login-btn {
           width: 100%;
-          padding: 14px;
+          padding: 15px;
           border: none;
           border-radius: 14px;
           font-size: 16px;
           font-weight: 600;
           cursor: pointer;
           color: white;
-          transition: background 0.2s, transform 0.1s, opacity 0.2s;
+          transition: background 0.2s, transform 0.1s;
           font-family: inherit;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 8px;
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
         }
         .login-btn.active { background: #6366f1; }
         .login-btn.active:hover { background: #4f46e5; }
         .login-btn.active:active { transform: scale(0.97); }
-        .login-btn.inactive { background: #334155; color: #64748b; cursor: not-allowed; }
+        .login-btn.inactive {
+          background: #1e293b;
+          border: 1px solid #334155;
+          color: #475569;
+          cursor: not-allowed;
+        }
+
         .spin-icon {
           width: 18px; height: 18px;
-          border: 2px solid rgba(255,255,255,0.3);
+          border: 2px solid rgba(255,255,255,0.25);
           border-top-color: white;
           border-radius: 50%;
           animation: spin 0.7s linear infinite;
+          flex-shrink: 0;
+        }
+
+        /* Mobil */
+        @media (max-width: 480px) {
+          .login-card {
+            padding: 32px 20px 40px;
+            border-radius: 20px;
+          }
+          .login-icon { font-size: 44px; }
+          .login-title { font-size: 22px; }
+          .code-box {
+            width: 40px;
+            height: 50px;
+            font-size: 22px;
+            border-radius: 10px;
+          }
+          .code-row { gap: 7px; }
+        }
+
+        @media (max-width: 360px) {
+          .code-box {
+            width: 36px;
+            height: 46px;
+            font-size: 20px;
+          }
+          .code-row { gap: 6px; }
         }
       `}</style>
 
@@ -160,8 +242,10 @@ export default function LoginPage() {
                 ref={(el) => { inputRefs.current[i] = el; }}
                 type="text"
                 inputMode="numeric"
+                pattern="[0-9]*"
                 maxLength={1}
                 value={val}
+                autoComplete="one-time-code"
                 onChange={(e) => handleChange(i, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(i, e)}
                 onPaste={handlePaste}
